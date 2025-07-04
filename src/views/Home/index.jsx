@@ -3,13 +3,15 @@ import { useState ,useEffect,useRef} from 'react'
 import Navbar from '../../components/Navbar'
 import Events from '../../components/Events'
 import SignupForm from '../../components/SignupForm'
-import useEventsData from '../../hooks/useEventsData';
+import useEventsResults from '../../state/events-results';
 import ReactPaginate from 'react-paginate';
 
 
 const Home = () => {
-  
-  const { events,loading,error,fetchEvents ,page} = useEventsData();
+
+  const { data,error,loading,fetchEvents } = useEventsResults();
+  const events = data?._embedded?.events || [];
+  const page = data.page || {};
   const [searchTerm, setSearchTerm] = useState('');
   const containerRef = useRef(null);
   useEffect(()=>{
