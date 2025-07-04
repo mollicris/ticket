@@ -16,7 +16,7 @@ const useEventsResults = create((set) => ({
             const data = await response.json();
             await set(() => ({data,isLoading: false}));
         } catch (error) {
-            await set(() => ({error,isLoading: false}));
+            await set(() => ({error, isLoading: false}));
         } finally {
             await set(() => ({isLoading: false}));
         }

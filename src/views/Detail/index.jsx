@@ -4,6 +4,7 @@ import { set } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import {format} from 'date-fns';
 import { es } from 'date-fns/locale';
+import styles from './Details.module.css';
 
 const Detail = () => {
   const { eventId } = useParams();
@@ -13,13 +14,17 @@ const Detail = () => {
 
   useEffect(() => {
     // Fetch event details using eventId
+    console.log("Data fetched for event:" + eventId);
     const fetchEventData = async () => {
       try {
+        console.log("Fetching event details for ID:", eventId);
         const response = await fetch(`https://app.ticketmaster.com/discovery/v2/events/${eventId}?apikey=enSY7Tyrr2tR3EvmACC69vqwynbN9SJd`);
+        console.log("Response status:" + response.ok);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
+        console.log("Data fetched for event:");
         console.log(data);
         setEventData(data);
         setLoading(false);
@@ -29,6 +34,7 @@ const Detail = () => {
         setLoading(false);
       }
     }
+    fetchEventData();
   }, []);
 
   console.log(eventData);
@@ -41,8 +47,8 @@ const Detail = () => {
   }
 
   return (
-    <div>Detail of event {eventId}
-      <div>
+    <div  className={styles.container}>Detail of event {eventId}
+      <div className={styles.mainInfoContainer}>
         <img src={eventData.images?.[0].url} alt={eventData.name} />
         <h4>{eventData.name}</h4>
         <p>{eventData.info}</p>
@@ -50,7 +56,7 @@ const Detail = () => {
       </div>
       <div className={styles.detail}>
         <h6>Mapa del Evento</h6>
-        <img src={eventData.seatMap.staticUrl} alt="Mapa de asientos" />
+        <img src={eventData.seatmap.staticUrl} alt="Mapa de asientos" />
         <p>{eventData.pleaseNote}</p>
         <p>Rango de Precios : {eventData.priceRanges?.[0]?.currency} {eventData.priceRanges?.[0]?.min} - {eventData.priceRanges?.[0]?.max}</p>
       </div>
